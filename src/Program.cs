@@ -1,6 +1,8 @@
 ﻿using System;
 using PlayerNS;
 using System.Threading;
+using MonstersNS;
+using BattleNS;
 
 namespace src
 {
@@ -9,7 +11,7 @@ namespace src
         static void Main(string[] args)
         {
             //Menu
-            Console.WriteLine("==++== C# RPG v0.0.1 ==++==");
+            Console.WriteLine("==++== C# RPG v0.0.2 ==++==");
             Console.WriteLine("==Menu==");
             Console.WriteLine("[ 1 ] - Começar.    [ 2 ] - Sair");
             int menuChoice = Convert.ToInt32(Console.ReadLine());
@@ -36,12 +38,12 @@ namespace src
             player.CreatePlayer(playerName);
             player.SeeStatus();//Ver status
 
-            while(true){//Loop do jogo, não ira acabar até haver um 'break'
+            while(true){
                 //Informações inicias
-                Console.WriteLine($"Você está em: {player.SeeArroud()}, você já deu {player.steps}");
+                Console.WriteLine($"Você está em: {player.SeeArroud()}, você já andou {player.steps} vezes.");
 
                 Console.WriteLine("O que deseja fazer?");
-                Console.WriteLine("[ 1 ] - Andar. [ 2 ] - Ver status");
+                Console.WriteLine("[ 1 ] - Andar.    [ 2 ] - Voltar.    [ 3 ] - Ver status.");
                 int playerChoice = Convert.ToInt32(Console.ReadLine());
                 
                 switch(playerChoice){//Processar escolha
@@ -53,10 +55,43 @@ namespace src
                         player.Walk();
                         Console.WriteLine($"[ {walkTimes} ] - Você andou.");
                         Thread.Sleep(500);//Tempo entre um e outro 'Andar'
+
+                        //Chace de encontrar algum monstro no meio do caminho
+                        #region Monster Founder
+                        if(Monster.MonsterFound() == false){
+                            continue;
+                        }else{
+                            //Cria Monstro de acordo com o local
+                            Monster monster = new Monster();
+                            if(player.SeeArroud() == "Planices"){
+                                PlaniceMonsters planiceMonsters = new PlaniceMonsters();
+                                monster = planiceMonsters.createPlaniceMonster();
+
+                                Console.WriteLine("Um monstro apareceu!");
+                                Thread.Sleep(3000);
+                                Console.WriteLine($"Você vai lutar contra: {monster.monsterName}");
+                                
+                                Battle battle = new Battle(player, monster);
+                            }
+                        }
+                        #endregion
                     }
                     break;
+
                     case 2:
+                    Console.WriteLine("Quer executar quantas vezes a ação Voltar?");
+                    int returnTimes = Convert.ToInt32(Console.ReadLine());
+
+                    for(; returnTimes != 0; returnTimes--){
+                        player.Return();
+                        Console.WriteLine($"[ {returnTimes} ] - Você andou.");
+                        Thread.Sleep(500);
+                    }
+                    break;
+
+                    case 3:
                     player.SeeStatus();
+                    break;
                 }
             }
         }
