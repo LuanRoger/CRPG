@@ -11,7 +11,7 @@ namespace src
         static void Main(string[] args)
         {
             //Menu
-            Console.WriteLine("==++== C# RPG v0.0.2 ==++==");
+            Console.WriteLine("==++== C# RPG v0.0.3 ==++==");
             Console.WriteLine("==Menu==");
             Console.WriteLine("[ 1 ] - Começar.    [ 2 ] - Sair");
             int menuChoice = Convert.ToInt32(Console.ReadLine());
@@ -66,6 +66,45 @@ namespace src
                             if(player.SeeArroud() == "Planices"){
                                 PlaniceMonsters planiceMonsters = new PlaniceMonsters();
                                 monster = planiceMonsters.createPlaniceMonster();
+
+                                Console.WriteLine("Um monstro apareceu!");
+                                Thread.Sleep(3000);
+                                Console.WriteLine($"Você vai lutar contra: {monster.monsterName}");
+                                
+                                Battle battle = new Battle(player, monster);
+                            }
+                            else if(player.SeeArroud() == "Floresta"){
+                                FlorestMonsters florestMonsters = new FlorestMonsters();
+                                monster = florestMonsters.createFlorestMonster();
+
+                                Console.WriteLine("Um monstro apareceu!");
+                                Thread.Sleep(3000);
+                                Console.WriteLine($"Você vai lutar contra: {monster.monsterName}");
+
+                                Battle battle = new Battle(player, monster);
+                            }
+                            else if(player.SeeArroud() == "Pantano"){
+                                SwampMonsters swampMonsters = new SwampMonsters();
+                                monster = swampMonsters.createSwampMonster();
+
+                                Console.WriteLine("Um monstro apareceu!");
+                                Thread.Sleep(3000);
+                                Console.WriteLine($"Você vai lutar contra: {monster.monsterName}");
+
+                                Battle battle = new Battle(player, monster);
+                            }else if(player.SeeArroud() == "Deserto"){
+                                DesertMonsters desertMonsters = new DesertMonsters();
+                                monster = desertMonsters.createDesertMonster();
+
+                                Console.WriteLine("Um monstro apareceu!");
+                                Thread.Sleep(3000);
+                                Console.WriteLine($"Você vai lutar contra: {monster.monsterName}");
+                                
+                                Battle battle = new Battle(player, monster);
+                            }
+                            else if(player.SeeArroud() == "Piramide"){
+                                PyramidMonsters pyramidMonsters = new PyramidMonsters();
+                                monster = pyramidMonsters.createPyramidMonster();
 
                                 Console.WriteLine("Um monstro apareceu!");
                                 Thread.Sleep(3000);

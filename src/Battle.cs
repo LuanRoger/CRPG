@@ -6,12 +6,13 @@ using System.Threading;
 namespace BattleNS {
     public class Battle{
         public Battle(Player player, Monster monster){
-            while (player.playerHp > 0 || monster.monsterHp > 0)
+            while (true)
             {
                 BattleStatus(player, monster);
                 PlayerTurn(player, monster);
                 if(monster.monsterHp <= 0){ break; } //Casso o mostro morra antes da verificação do while 
                 MonsterTurn(player, monster);
+                if(player.playerHp <= 0) { break; }
             }
 
             if(player.playerHp >= 0){

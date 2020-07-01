@@ -11,7 +11,7 @@
     "/home/luanroger/.nuget/packages/": {}
   },
   "project": {
-    "version": "0.0.2",
+    "version": "0.0.3",
     "restore": {
       "projectUniqueName": "/home/luanroger/Documentos/Jobs/csharp/C#RPG/src/src.csproj",
       "projectName": "src",

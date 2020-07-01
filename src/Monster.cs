@@ -41,6 +41,85 @@ namespace MonstersNS{
 
             return planiceMonster;
         }
-        
+    }
+    public class FlorestMonsters{
+        private string[] monsterFlorestName = new string[] {"Gnomo", "Ciclope", "Árvore Amaldiçoada", "Estranho", "Raiz Enfeitiçada", "Pássaro Perigosso"};
+        private int[] monsterFlorestHp = new int[] {8, 18, 20, 13, 15, 7};
+        private int[] monsterFlorestAtk = new int[] {5, 9, 5, 4, 6, 7};
+        private int[] monsterFlorestXpDrop = new int[] {6, 12, 8, 5, 8, 5};
+
+        public Monster createFlorestMonster(){
+            Monster florestMonster = new Monster();
+            Random mosnterChoice = new Random();
+            int monsterId = mosnterChoice.Next(0,6); //Vai escolher o index dos monstros
+
+            //Atribuir de acordo com o index
+            florestMonster.monsterName = monsterFlorestName[monsterId];
+            florestMonster.monsterHp = monsterFlorestHp[monsterId];
+            florestMonster.monsterAtk = monsterFlorestAtk[monsterId];
+            florestMonster.monsterXpDrop = monsterFlorestXpDrop[monsterId];
+
+            return florestMonster;
+        }
+    }
+    public class SwampMonsters{
+        private string[] monsterSwampName = new string[] {"Jacaré Grande", "Ogro", "Piranha", "Monstro de Lodo", "Mergulhador Antigo", "Cobra Gigante"};
+        private int[] monsterSwampHp = new int[] {17, 21, 14, 22, 19, 16};
+        private int[] monsterSwampAtk = new int[] {11, 13, 11, 13, 10, 13};
+        private int[] monsterSwampXpDrop = new int[] {15, 13, 15, 13, 12, 12};
+
+        public Monster createSwampMonster(){
+            Monster swampMonster = new Monster();
+            Random mosnterChoice = new Random();
+            int monsterId = mosnterChoice.Next(0,6); //Vai escolher o index dos monstros
+
+            //Atribuir de acordo com o index
+            swampMonster.monsterName = monsterSwampName[monsterId];
+            swampMonster.monsterHp = monsterSwampHp[monsterId];
+            swampMonster.monsterAtk = monsterSwampAtk[monsterId];
+            swampMonster.monsterXpDrop = monsterSwampXpDrop[monsterId];
+
+            return swampMonster;
+        }
+    }
+    public class DesertMonsters{
+        private string[] monsterDesertName = new string[] {"Elemento de Fogo", "Tempestade Viva", "Cacto", "Lobo do Deserto", "Zumbi de areia", "Serpente"};
+        private int[] monsterDesertHp = new int[] {25, 29, 21, 27, 27, 24};
+        private int[] monsterDesertAtk = new int[] {17, 18, 15, 20, 18, 19};
+        private int[] monsterDesertXpDrop = new int[] {19, 21, 15, 20, 19, 19};
+
+        public Monster createDesertMonster(){
+            Monster desertMonster = new Monster();
+            Random mosnterChoice = new Random();
+            int monsterId = mosnterChoice.Next(0,6); //Vai escolher o index dos monstros
+
+            //Atribuir de acordo com o index
+            desertMonster.monsterName = monsterDesertName[monsterId];
+            desertMonster.monsterHp = monsterDesertHp[monsterId];
+            desertMonster.monsterAtk = monsterDesertAtk[monsterId];
+            desertMonster.monsterXpDrop = monsterDesertXpDrop[monsterId];
+
+            return desertMonster;
+        }
+    }
+    public class PyramidMonsters{
+        private string[] monsterPyramidName = new string[] {"Besouro Antigo", "Múmia", "Parede com Rosto", "Fantasma", "Mímico", "Bicho de piramide"};
+        private int[] monsterPyramidHp = new int[] {33, 37, 42, 40, 39, 40};
+        private int[] monsterPyramidAtk = new int[] {22, 25, 26, 28, 29, 27};
+        private int[] monsterPyramidXpDrop = new int[] {24, 28, 30, 33, 32, 31};
+
+        public Monster createPyramidMonster(){
+            Monster pyramidMonster = new Monster();
+            Random mosnterChoice = new Random();
+            int monsterId = mosnterChoice.Next(0,6); //Vai escolher o index dos monstros
+
+            //Atribuir de acordo com o index
+            pyramidMonster.monsterName = monsterPyramidName[monsterId];
+            pyramidMonster.monsterHp = monsterPyramidHp[monsterId];
+            pyramidMonster.monsterAtk = monsterPyramidAtk[monsterId];
+            pyramidMonster.monsterXpDrop = monsterPyramidXpDrop[monsterId];
+
+            return pyramidMonster;
+        }
     }
 }

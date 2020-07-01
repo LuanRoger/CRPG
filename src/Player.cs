@@ -50,11 +50,18 @@ namespace PlayerNS{
         public bool PlayerUndefenceAction() => this.playerIsDefending = false;
         public void AddXp(int xpAmmount) => this.palyerXp += xpAmmount;
         public void LevelUp(){
-            if(this.palyerXp == this.xpToUp){
+            if(this.palyerXp >= this.xpToUp){
                 this.playerLevel += 1;
                 this.xpToUp *= 2;
                 Console.WriteLine("======================");
                 Console.WriteLine($"Você passou de nivel!\nAgora você está no level: {this.playerLevel}");
+                //Aumentar atributos
+                this.playerAtk += 3;
+                Console.WriteLine("Seu ataque aumentou em 3.");
+                this.playerDef += 2;
+                Console.WriteLine("Sua defesa aumentou em 2.");
+                this.playerHp += 7;
+                Console.WriteLine("Seu HP aumentou em 7.");
                 Console.WriteLine("======================");
             }else{
                 return;
@@ -66,7 +73,7 @@ namespace PlayerNS{
             Console.WriteLine($"Nome: {this.name}");
             Console.WriteLine($"Ataque: {this.playerAtk}");
             Console.WriteLine($"Defesa: {this.playerDef}");
-            Console.WriteLine($"Vida: {this.playerHp}");
+            Console.WriteLine($"HP: {this.playerHp}");
             Console.WriteLine($"XP: {this.palyerXp}. Faltam {this.xpToUp - this.palyerXp} para o próximo nivel.");
             Console.WriteLine("=================================");
 
