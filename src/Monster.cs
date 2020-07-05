@@ -20,7 +20,6 @@ namespace MonstersNS{
             return isFounded;
         }
     }
-
     public class PlaniceMonsters{
 
         private string[] monsterPlaniceName = new string[] {"Ladrão", "Cavalo Louco", "Borboleta", "Lobo", "Alien Fraco", "Minhoca"};

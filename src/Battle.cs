@@ -9,8 +9,11 @@ namespace BattleNS {
             while (true)
             {
                 BattleStatus(player, monster);
+                Thread.Sleep(1500);
+
                 PlayerTurn(player, monster);
                 if(monster.monsterHp <= 0){ break; } //Casso o mostro morra antes da verificação do while 
+
                 MonsterTurn(player, monster);
                 if(player.playerHp <= 0) { break; }
             }
@@ -39,8 +42,14 @@ namespace BattleNS {
         private void PlayerTurn(Player playerAtributes, Monster monsterAtributes){
             //Player turn
             Console.WriteLine("O que você vai fazer? ");
-            Console.WriteLine("[ 1 ] - Atacar.     [ 2 ] - Defender.");
-            int battleChoice = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("> [ 1 ] - Atacar.     [ 2 ] - Defender.");
+            int battleChoice = 0;
+            try { battleChoice = Convert.ToInt32(Console.ReadLine()); }
+            catch(Exception e) {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Ocorreu um error: {e.Message}");
+                Console.WriteLine($"O programa será encerrado.");
+            }
 
             switch(battleChoice){
                 case 1:
@@ -59,10 +68,6 @@ namespace BattleNS {
                 case 2:
                 playerAtributes.PlayerDefenceAction();
                 System.Console.WriteLine("Você esta se defendendo.");
-                break;
-                    
-                case 3: //Teste, pois isso ira fazer com que player perca a vez.
-                playerAtributes.SeeStatus();
                 break;
             }
         }

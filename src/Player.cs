@@ -42,7 +42,7 @@ namespace PlayerNS{
             }else if(this.steps >= 60){
                 return lands.places[4];
             }else{
-                return "Void";
+                return "¿Void? - Não há nada para ver aqui...";
             }
         }
         public int PlayerAttackAction() => this.playerAtk;

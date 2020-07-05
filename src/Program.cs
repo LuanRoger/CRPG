@@ -3,6 +3,7 @@ using PlayerNS;
 using System.Threading;
 using MonstersNS;
 using BattleNS;
+using ConfigNS;
 
 namespace src
 {
@@ -10,11 +11,22 @@ namespace src
     {
         static void Main(string[] args)
         {
+            Config.setConfigs();
+
             //Menu
-            Console.WriteLine("==++== C# RPG v0.0.3 ==++==");
-            Console.WriteLine("==Menu==");
-            Console.WriteLine("[ 1 ] - Começar.    [ 2 ] - Sair");
-            int menuChoice = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+");
+            Console.WriteLine("+      C# RPG v0.0.4         +");
+            Console.WriteLine("+      por Luan Roger        +");
+            Console.WriteLine("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+");
+            Console.WriteLine("=+=+=+=+=+= Menu =+=+=+=+=+=+=+=+");
+            Console.WriteLine("> [ 1 ] - Começar.    [ 2 ] - Sair.");
+            int menuChoice = 0; //Valor padrão
+            try{ menuChoice = Convert.ToInt32(Console.ReadLine()); }
+            catch(Exception e){
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Ocorreu um error: {e.Message}");
+                Console.WriteLine($"O programa será encerrado.");
+            }
 
             switch(menuChoice){//Processar escolha
                 case 1:
@@ -23,33 +35,47 @@ namespace src
                 case 2:
                 Environment.Exit(0);
                 break;
-                
-                default:
-                Console.WriteLine("Valor inválido.");
-                Environment.Exit(1);
-                break;
             }
 
             //Criar personagem
-            Console.WriteLine("Digite o nome do seu personagem:");
-            string playerName = Console.ReadLine().ToUpper();
+            Console.WriteLine("> Digite o nome do seu personagem:");
+            string playerName = "player";
+            try{ playerName = Console.ReadLine().ToUpper(); }
+            catch(Exception e){
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Ocorreu um error: {e.Message}");
+                Console.WriteLine($"O programa será encerrado.");
+            }
 
             Player player = new Player();
             player.CreatePlayer(playerName);
             player.SeeStatus();//Ver status
+            Thread.Sleep(3000);
 
-            while(true){
+            while(player.steps < 100){
                 //Informações inicias
                 Console.WriteLine($"Você está em: {player.SeeArroud()}, você já andou {player.steps} vezes.");
 
                 Console.WriteLine("O que deseja fazer?");
-                Console.WriteLine("[ 1 ] - Andar.    [ 2 ] - Voltar.    [ 3 ] - Ver status.");
-                int playerChoice = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("> [ 1 ] - Andar.    [ 2 ] - Voltar.    [ 3 ] - Ver status.    [ 4 ] - Sair do jogo.");
+                int playerChoice = 0;
+                try{ playerChoice = Convert.ToInt32(Console.ReadLine()); }
+                catch(Exception e){
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Ocorreu um error: {e.Message}");
+                    Console.WriteLine($"O programa será encerrado.");
+                }
                 
                 switch(playerChoice){//Processar escolha
                     case 1:
                     Console.WriteLine("Quer executar quantas vezes a ação Andar?");
-                    int walkTimes = Convert.ToInt32(Console.ReadLine());
+                    int walkTimes = 0;
+                    try{ walkTimes = Convert.ToInt32(Console.ReadLine()); }
+                    catch(Exception e) {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Ocorreu um error: {e.Message}");
+                        Console.WriteLine($"O programa será encerrado.");
+                    }
 
                     for(; walkTimes != 0; walkTimes--){//Andar quantas vezes o usuário mandar
                         player.Walk();
@@ -119,20 +145,39 @@ namespace src
 
                     case 2:
                     Console.WriteLine("Quer executar quantas vezes a ação Voltar?");
-                    int returnTimes = Convert.ToInt32(Console.ReadLine());
+                    int returnTimes = 0;
+                    try{ returnTimes = Convert.ToInt32(Console.ReadLine()); }
+                    catch(Exception e){
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Ocorreu um error: {e.Message}");
+                        Console.WriteLine($"O programa será encerrado.");
+                    }
 
                     for(; returnTimes != 0; returnTimes--){
                         player.Return();
                         Console.WriteLine($"[ {returnTimes} ] - Você andou.");
-                        Thread.Sleep(500);
+                        Thread.Sleep(800);
                     }
                     break;
 
                     case 3:
                     player.SeeStatus();
                     break;
+
+                    case 4:
+                    Environment.Exit(0);
+                    break;
                 }
             }
+            Console.WriteLine("=+=+=+=+=+=+Parabéns!!!=+=+=+=+=+");
+            Console.WriteLine("+Você conseguiu terminar o jogo.+");
+            Console.WriteLine("+             😎                +");
+            Console.WriteLine("=+=+=+=+Obrigado por jogar.=+=+=+\n");
+
+            Console.WriteLine("!..GitHub.................................!");
+            Console.WriteLine("! Visite meu GitHub: github.com/LuanRoger !...................!");
+            Console.WriteLine("! Veja também o repositório do jogo: github.com/LuanRoger/CRPG!");
+            Console.WriteLine("!.............................................................!");
         }
     }
 }
