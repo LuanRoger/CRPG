@@ -26,6 +26,7 @@ namespace src
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Ocorreu um error: {e.Message}");
                 Console.WriteLine($"O programa será encerrado.");
+                Environment.Exit(1);
             }
 
             switch(menuChoice){//Processar escolha
@@ -64,6 +65,7 @@ namespace src
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Ocorreu um error: {e.Message}");
                     Console.WriteLine($"O programa será encerrado.");
+                    Environment.Exit(1);
                 }
                 
                 switch(playerChoice){//Processar escolha
@@ -131,6 +133,16 @@ namespace src
                             else if(player.SeeArroud() == "Piramide"){
                                 PyramidMonsters pyramidMonsters = new PyramidMonsters();
                                 monster = pyramidMonsters.createPyramidMonster();
+
+                                Console.WriteLine("Um monstro apareceu!");
+                                Thread.Sleep(3000);
+                                Console.WriteLine($"Você vai lutar contra: {monster.monsterName}");
+                                
+                                Battle battle = new Battle(player, monster);
+                            }
+                            else if(player.SeeArroud() == "Final Boss"){
+                                Boss finalBoss = new Boss();
+                                monster = finalBoss.createFinalBoss();
 
                                 Console.WriteLine("Um monstro apareceu!");
                                 Thread.Sleep(3000);

@@ -121,4 +121,15 @@ namespace MonstersNS{
             return pyramidMonster;
         }
     }
+    public class Boss{
+        public Monster createFinalBoss(){
+            Monster finalBoss = new Monster();
+            finalBoss.monsterName = "Crystal";
+            finalBoss.monsterHp = 128;
+            finalBoss.monsterAtk = 48;
+            finalBoss.monsterXpDrop = 500;
+
+            return finalBoss;
+        }
+    }
 }

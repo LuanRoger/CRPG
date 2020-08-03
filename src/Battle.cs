@@ -49,6 +49,7 @@ namespace BattleNS {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Ocorreu um error: {e.Message}");
                 Console.WriteLine($"O programa será encerrado.");
+                Environment.Exit(1);
             }
 
             switch(battleChoice){
@@ -57,11 +58,15 @@ namespace BattleNS {
                 Thread.Sleep(2000);
                 if(monsterAtributes.monsterIsDefending == true){ //Dividir o ataque do player por 2 casso o monstro esteja defendendo
                     monsterAtributes.monsterHp -= playerAtributes.PlayerAttackAction()/2;
+                    Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine($"Você deu {playerAtributes.PlayerAttackAction()/2} de dano.");
+                    Console.ForegroundColor = ConsoleColor.Black;
                     monsterAtributes.MosnterUndefenceAction();
                 }else{
                     monsterAtributes.monsterHp -= playerAtributes.PlayerAttackAction();
+                    Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine($"Você deu {playerAtributes.PlayerAttackAction()} de dano.");
+                    Console.ForegroundColor = ConsoleColor.Black;
                 }
                 break;
 
@@ -84,12 +89,16 @@ namespace BattleNS {
                 if(playerAtributes.playerIsDefending == true){
                     playerAtributes.playerHp -= monsterAtributes.MosnterAttackAction()/2;
                     Thread.Sleep(2000);
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Você recebeu {monsterAtributes.MosnterAttackAction()/2} de dano.");
+                    Console.ForegroundColor = ConsoleColor.Black;
                     playerAtributes.PlayerUndefenceAction();
                 }else{
                     playerAtributes.playerHp -= monsterAtributes.MosnterAttackAction();
                     Thread.Sleep(2000);
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Você recebeu {monsterAtributes.MosnterAttackAction()} de dano.");
+                    Console.ForegroundColor = ConsoleColor.Black;
                 }
                 break;
                     

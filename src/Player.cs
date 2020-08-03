@@ -41,6 +41,8 @@ namespace PlayerNS{
                 return lands.places[3];
             }else if(this.steps >= 60){
                 return lands.places[4];
+            }else if(this.steps >= 90){
+                return "Final Boss";
             }else{
                 return "¿Void? - Não há nada para ver aqui...";
             }
