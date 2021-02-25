@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using Konsole;
 
 namespace CRPG
 {
@@ -11,15 +8,19 @@ namespace CRPG
     {
         private Player playerBatalha { get; }
         private Monstros monstroBatalha { get; }
-        public Batalha(Player player, Monstros monstro)
+        private IConsole[] telaMeioAndarConsole { get; }
+        private IConsole telaStatusAndarConsole { get; }
+        public Batalha(Player player, Monstros monstro, IConsole telaMeioAndarConsole, IConsole telaStatusAndarConsole)
         {
-            this.playerBatalha = player;
-            this.monstroBatalha = monstro;
+            playerBatalha = player;
+            monstroBatalha = monstro;
+            this.telaMeioAndarConsole = telaMeioAndarConsole.SplitColumns(new Split(0), new Split(50));
+            this.telaStatusAndarConsole = telaStatusAndarConsole;
 
             while (true)
             {
                 Thread.Sleep(1000);
-                StatusBatalha();
+                AtualizarStatusBatalha();
                 Thread.Sleep(500);
                 PlayerTurno();
 
@@ -28,71 +29,88 @@ namespace CRPG
                 MonsterTurno();
 
                 if (player.playerHp <= 0) break;
+
+                this.telaMeioAndarConsole[0].Clear();
+                this.telaMeioAndarConsole[1].Clear();
             }
             if (player.playerHp >= 0)
             {
-                Console.WriteLine("Você ganhou!");
+                telaStatusAndarConsole.WriteLine(" Você ganhou!");
                 Thread.Sleep(500);
                 player.AdicionarXp(monstroBatalha.monstroXpDrop);
-                Console.WriteLine($"Você recebeu {monstroBatalha.monstroXpDrop} de Xp");
+                telaStatusAndarConsole.WriteLine($"Você recebeu {monstroBatalha.monstroXpDrop} de Xp");
                 Thread.Sleep(1000);
                 player.LevelUp();
+
+                this.telaMeioAndarConsole[0].Clear();
+                this.telaMeioAndarConsole[1].Clear();
+                this.telaStatusAndarConsole.Clear();
             }
             else player.PlayerDie();
         }
-        private void StatusBatalha()
+        private void AtualizarStatusBatalha()
         {
-            Console.WriteLine("===Batalha========================");
-            Console.WriteLine("Player:");
-            Console.WriteLine($"HP: {this.playerBatalha.playerHp}");
-            Console.WriteLine($"ATK: {this.playerBatalha.playerAtk}");
-            Console.WriteLine($"DEF: {this.playerBatalha.playerDef}");
-            Console.WriteLine("=====================");
-            Console.WriteLine("Monstro:");
-            Console.WriteLine($"Nome: {monstroBatalha.monstroNome}");
-            Console.WriteLine($"HP: {this.monstroBatalha.monstroHp}");
-            Console.WriteLine($"ATK: {this.monstroBatalha.monstroAtk}");
-            Console.WriteLine("==================================");
+            var telaStatusMonstro = telaMeioAndarConsole[0].OpenBox("Monstro",  1, 0, 30, 7);
+            var telaStatusPlayer = telaMeioAndarConsole[1].OpenBox("Player", 30, 7);
+
+            telaStatusPlayer.WriteLine($"HP: {this.playerBatalha.playerHp}");
+            telaStatusPlayer.WriteLine($"ATK: {this.playerBatalha.playerAtk}");
+            telaStatusPlayer.WriteLine($"DEF: {this.playerBatalha.playerDef}");
+
+            telaStatusMonstro.WriteLine($"Nome: {monstroBatalha.monstroNome}");
+            telaStatusMonstro.WriteLine($"HP: {this.monstroBatalha.monstroHp}");
+            telaStatusMonstro.WriteLine($"ATK: {this.monstroBatalha.monstroAtk}");
         }
 
         #region Turnos
         private void PlayerTurno()
         {
-            Console.WriteLine("O que você vai fazer? ");
-            Console.WriteLine("> [ 1 ] - Atacar.     [ 2 ] - Defender.");
-            int battleChoice = 0;
-            try { battleChoice = Convert.ToInt32(Console.ReadLine()); }
-            catch (Exception e) { Error.ErrorFatal(e); }
-
-            switch (battleChoice)
+            var mnuAtacar = new MenuItem("Atacar", () =>
             {
-                case 1:
-                    Console.WriteLine("Você ataca.");
-                    Thread.Sleep(2000);
+                telaStatusAndarConsole.ForegroundColor = ConsoleColor.Yellow;
+                telaStatusAndarConsole.WriteLine("Você ataca.");
+                telaStatusAndarConsole.ForegroundColor = ConsoleColor.Gray;
 
-                    int dano = playerBatalha.PlayerAttack();
-                    if (monstroBatalha.monstroDefendendo)
-                    {
-                        monstroBatalha.monstroHp -= dano / 2;
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.WriteLine($"Você deu {dano/2} de dano.");
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        monstroBatalha.MosnterDesdefender();
-                    }
-                    else
-                    {
-                        monstroBatalha.monstroHp -= dano;
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.WriteLine($"Você deu {dano} de dano.");
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                    }
-                    break;
+                Thread.Sleep(2000);
 
-                case 2:
-                    playerBatalha.PlayerDefender();
-                    Console.WriteLine("Você esta se defendendo.");
-                    break;
-            }
+                int dano = playerBatalha.PlayerAttack();
+                if (monstroBatalha.monstroDefendendo)
+                {
+                    monstroBatalha.monstroHp -= dano / 2;
+
+                    telaStatusAndarConsole.ForegroundColor = ConsoleColor.Yellow;
+                    telaStatusAndarConsole.WriteLine($"Você deu {dano / 2} de dano.");
+                    telaStatusAndarConsole.ForegroundColor = ConsoleColor.Gray;
+
+                    monstroBatalha.MosnterDesdefender();
+                }
+                else
+                {
+                    monstroBatalha.monstroHp -= dano;
+
+                    telaStatusAndarConsole.ForegroundColor = ConsoleColor.Yellow;
+                    telaStatusAndarConsole.WriteLine($"Você deu {dano} de dano.");
+                    telaStatusAndarConsole.ForegroundColor = ConsoleColor.Gray;
+                }
+            });
+            var mnuDefender = new MenuItem("Defender", () =>
+            {
+                playerBatalha.PlayerDefender();
+                telaStatusAndarConsole.WriteLine("Você esta se defendendo.");
+            });
+            var batalhaMenu = new Menu(telaMeioAndarConsole[1], "O que deseja fazer? (ESC para pular)",
+                ConsoleKey.Escape, 45,
+                mnuAtacar, mnuDefender)
+            {
+                OnAfterMenuItem = delegate
+                {
+                    mnuAtacar.Enabled = false;
+                    mnuDefender.Enabled = false;
+                    telaMeioAndarConsole[1].WriteLine("Aperte ESC para continuar");
+                }
+            };
+            batalhaMenu.Run();
+
         }
         private void MonsterTurno()
         {
@@ -100,7 +118,11 @@ namespace CRPG
             switch (escolhaMonstro)
             {
                 case 0:
-                    Console.WriteLine("O monstro ataca você.");
+
+                    telaStatusAndarConsole.ForegroundColor = ConsoleColor.Red;
+                    telaStatusAndarConsole.WriteLine($" {monstroBatalha.monstroNome} ataca você.");
+                    telaStatusAndarConsole.ForegroundColor = ConsoleColor.Gray;
+
                     Thread.Sleep(500);
 
                     int dano = monstroBatalha.MosnterAtacar();
@@ -108,23 +130,29 @@ namespace CRPG
                     {
                         playerBatalha.playerHp -= dano - playerBatalha.playerDef;
                         Thread.Sleep(2000);
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Você recebeu {dano - playerBatalha.playerDef} de dano.");
-                        Console.ForegroundColor = ConsoleColor.Gray;
+
+                        telaStatusAndarConsole.ForegroundColor = ConsoleColor.Red;
+                        telaStatusAndarConsole.WriteLine($"Você recebeu {dano - playerBatalha.playerDef} de dano.");
+                        telaStatusAndarConsole.ForegroundColor = ConsoleColor.Gray;
+
                         playerBatalha.PlayerDesdefender();
                     }
                     else
                     {
                         playerBatalha.playerHp -= dano;
                         Thread.Sleep(2000);
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Você recebeu {dano} de dano.");
-                        Console.ForegroundColor = ConsoleColor.Gray;
+
+                        telaStatusAndarConsole.ForegroundColor = ConsoleColor.Red;
+                        telaStatusAndarConsole.WriteLine($"Você recebeu {dano} de dano.");
+                        telaStatusAndarConsole.ForegroundColor = ConsoleColor.Gray;
                     }
                     break;
 
                 case 1:
-                    Console.WriteLine("O monstro está se defendendo.");
+                    telaStatusAndarConsole.ForegroundColor = ConsoleColor.Red;
+                    telaStatusAndarConsole.WriteLine($"{monstroBatalha.monstroNome} está se defendendo.");
+                    telaStatusAndarConsole.ForegroundColor = ConsoleColor.Gray;
+
                     Thread.Sleep(2000);
 
                     monstroBatalha.MosnterDefender();

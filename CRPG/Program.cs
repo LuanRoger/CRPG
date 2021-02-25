@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Konsole;
 
 namespace CRPG
 {
@@ -10,12 +11,18 @@ namespace CRPG
             Config.SetConfigs();
 
             //Menu
-            Console.WriteLine("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+");
-            Console.WriteLine("+           C# RPG             +");
-            Console.WriteLine("+       por Luan Roger         +");
-            Console.WriteLine("=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+");
-            Console.WriteLine("=+=+=+=+=+= Menu =+=+=+=+=+=+=+=+");
-            Console.WriteLine("> [ 1 ] - Começar.    [ 2 ] - Sair.");
+            var bemvindoWin = Window.OpenBox("C# RPG", 30, 5, new BoxStyle
+            {
+                ThickNess = LineThickNess.Double,
+                Title = new Colors(ConsoleColor.White, ConsoleColor.DarkMagenta)
+            });
+            bemvindoWin.WriteLine("       por Luan Roger");
+            bemvindoWin.WriteLine($"          v{Config.versao}");
+
+            var menuWin = new Window(35, 4, ConsoleColor.White, ConsoleColor.DarkBlue);
+            menuWin.WriteLine("Menu");
+            menuWin.WriteLine("-----------");
+            menuWin.WriteLine("> [ 1 ] - Começar.    [ 2 ] - Sair.");
             int escolhaMenu = 0;
             try { escolhaMenu = Convert.ToInt32(Console.ReadLine()); }
             catch (Exception e) { Error.ErrorFatal(e); }
@@ -33,20 +40,29 @@ namespace CRPG
             //Criar personagem
             Console.WriteLine("> Digite o nome do seu personagem:");
             string playerName = null;
-            try { playerName = Console.ReadLine().ToUpper(); }
+            try { playerName = Console.ReadLine()?.ToUpper(); }
             catch (Exception e) { Error.ErrorFatal(e); }
 
             Player player = new(playerName);
+            Console.Clear();
             player.VerStatus();
             Thread.Sleep(3000);
+
+            Console.Clear();
 
             while (player.passos < 100)
             {
                 //Informações inicias
-                Console.WriteLine($"Você está em: {player.VerAoRedor()}, você já andou {player.passos} vezes.");
+                var infoWin = Window.OpenBox("Informações", 50, 4, new BoxStyle
+                {
+                    Title = new Colors(ConsoleColor.White, ConsoleColor.Blue)
+                });
+                infoWin.WriteLine($"Você está em: {player.VerAoRedor()}, você já andou {player.passos} vezes.");
 
-                Console.WriteLine("O que deseja fazer?");
-                Console.WriteLine("> [ 1 ] - Andar.    [ 2 ] - Voltar.    [ 3 ] - Ver status.    [ 4 ] - Sair do jogo.");
+                var menuGameWin = new Window(83, 4, ConsoleColor.White, ConsoleColor.DarkBlue);
+                menuGameWin.WriteLine("O que deseja fazer?");
+                menuGameWin.WriteLine("------------------");
+                menuGameWin.WriteLine("> [ 1 ] - Andar.    [ 2 ] - Voltar.    [ 3 ] - Ver status.    [ 4 ] - Sair do jogo.");
                 int playerChoice = 0;
                 try { playerChoice = Convert.ToInt32(Console.ReadLine()); }
                 catch (Exception e) { Error.ErrorFatal(e); }
@@ -59,42 +75,61 @@ namespace CRPG
                         try { andar = Convert.ToInt32(Console.ReadLine()); }
                         catch (Exception e) { Error.ErrorFatal(e); }
 
-                        for (; andar != 0; andar--)
+                        //Criar tela andar
+                        var telaAndar = new Window();
+                        var telasAndar = telaAndar.SplitRows(
+                            new Split(4, "Progresso", LineThickNess.Single),
+                            new Split(0, "Batalha"),
+                            new Split(5, "Acontecimentos", LineThickNess.Single));
+
+                        var meioTela = telasAndar[1];
+                        var statusTela = telasAndar[2];
+
+                        var progressoAndar = new ProgressBar(telasAndar[0], andar);
+
+                        for (int a = 0; andar != 0; andar--)
                         {
                             player.Andar();
-                            Console.WriteLine($"[ {andar} ] - Você andou.");
-                            Thread.Sleep(500);
+                            a++;
+                            progressoAndar.Refresh(a, "Andando...");
+                            Thread.Sleep(350);
 
                             #region Encontrar monstro
                             switch (player.VerAoRedor())
                             {
                                 case Locais.Planices:
                                     Monstros planiceMonstro = new Monstros().MonstroPlanice();
-                                    if (planiceMonstro != null) new Batalha(player, planiceMonstro);
+                                    if (planiceMonstro != null) new Batalha(player, planiceMonstro, meioTela, statusTela);
                                     break;
                                 case Locais.Floresta:
                                     Monstros florestaMonstros = new Monstros().FlorestaMonstro();
-                                    if (florestaMonstros != null) new Batalha(player, florestaMonstros);
+                                    if (florestaMonstros != null) new Batalha(player, florestaMonstros, meioTela, statusTela);
                                     break;
                                 case Locais.Pantano:
                                     Monstros pantanoMonstros = new Monstros().PantanoMonstro();
-                                    if (pantanoMonstros != null) new Batalha(player, pantanoMonstros);
+                                    if (pantanoMonstros != null) new Batalha(player, pantanoMonstros, meioTela, statusTela);
                                     break;
                                 case Locais.Deserto:
                                     Monstros desertoMonstros = new Monstros().DesertoMonstro();
-                                    if (desertoMonstros != null) new Batalha(player, desertoMonstros);
+                                    if (desertoMonstros != null) new Batalha(player, desertoMonstros, meioTela, statusTela);
                                     break;
                                 case Locais.Piramide:
                                     Monstros piramideMonstros = new Monstros().PiramideMosntro();
-                                    if (piramideMonstros != null) new Batalha(player, piramideMonstros);
+                                    if (piramideMonstros != null) new Batalha(player, piramideMonstros, meioTela, statusTela);
                                     break;
                                 case Locais.Void:
                                     Monstros voider = new Monstros().Vodier();
-                                    new Batalha(player, voider);
+                                    new Batalha(player, voider, meioTela, statusTela);
                                     break;
                             }
                             #endregion
+                            telaAndar.SplitRows(
+                                new Split(4, "Progresso", LineThickNess.Single),
+                                new Split(0, "Batalha"),
+                                new Split(5, "Acontecimentos", LineThickNess.Single));
                         }
+
+                        Console.Clear();
                         break;
 
                     case 2:
@@ -103,12 +138,21 @@ namespace CRPG
                         try { voltar = Convert.ToInt32(Console.ReadLine()); }
                         catch (Exception e) { Error.ErrorFatal(e); }
 
-                        for (; voltar != 0; voltar--)
+                        var telaVoltar = new Window().SplitRows(
+                            new Split(5, "Progresso", LineThickNess.Single),
+                            new Split(0));
+
+                            var progressoVoltar = new ProgressBar(telaVoltar[0], voltar);
+
+                        for (int v = 0; voltar != 0; voltar--)
                         {
                             player.Voltar();
-                            Console.WriteLine($"[ {voltar} ] - Você voltou.");
+                            v++;
+                            progressoVoltar.Refresh(v, "Voltando...");
                             Thread.Sleep(800);
                         }
+
+                        Console.Clear();
                         break;
 
                     case 3:

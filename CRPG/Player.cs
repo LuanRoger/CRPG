@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Konsole;
 
 namespace CRPG
 {
@@ -29,13 +31,16 @@ namespace CRPG
         }
         public void VerStatus()
         {
-            Console.WriteLine("===Status========================");
-            Console.WriteLine($"Nome: {nome}");
-            Console.WriteLine($"Ataque: {playerAtk}");
-            Console.WriteLine($"Defesa: {playerDef}");
-            Console.WriteLine($"HP: {playerHp}");
-            Console.WriteLine($"XP: {palyerXp}. Faltam {xpParaProximo - palyerXp} para o próximo nivel.");
-            Console.WriteLine("=================================");
+            var status = Window.OpenBox("Status", 40, 10, new BoxStyle {
+                Title = new Colors( ConsoleColor.White, ConsoleColor.Blue),
+                ThickNess = LineThickNess.Double
+            });
+            status.WriteLine($"Nome: {nome}");
+            status.WriteLine($"Ataque: {playerAtk}");
+            status.WriteLine($"Defesa: {playerDef}");
+            status.WriteLine($"HP: {playerHp}");
+            status.WriteLine($"Level: {playerLevel}");
+            status.WriteLine($"XP: {palyerXp}. Faltam {xpParaProximo - palyerXp} para o próximo nivel.");
         }
 
         #region Ações
@@ -60,27 +65,36 @@ namespace CRPG
         public void AdicionarXp(int xpAmmount) => palyerXp += xpAmmount;
         public void LevelUp()
         {
+            Console.Clear();
             while (palyerXp >= xpParaProximo)
             {
                 playerLevel += 1;
                 xpParaProximo *= 2;
-                Console.WriteLine("======================");
-                Console.WriteLine($"Você passou de nivel!\nAgora você está no level: {this.playerLevel}");
+
+                var winLevelUp = Window.OpenBox("Level UP",  50, 10, new BoxStyle
+                {
+                    Title = new Colors(ConsoleColor.White, ConsoleColor.Yellow),
+                    ThickNess = LineThickNess.Double
+                });
+                winLevelUp.WriteLine($"Você passou de nivel!\nAgora você está no level: {this.playerLevel}");
 
                 //Aumentar atributos
-                this.playerAtk += 3;
-                Console.WriteLine("Seu ataque aumentou em 3.");
-                this.playerDef += 2;
-                Console.WriteLine("Sua defesa aumentou em 2.");
-                this.playerHp += 7;
-                Console.WriteLine("Seu HP aumentou em 7.");
-                Console.WriteLine("======================");
+                playerAtk += 3;
+                winLevelUp.WriteLine("Seu ataque aumentou em 3.");
+                playerDef += 2;
+                winLevelUp.WriteLine("Sua defesa aumentou em 2.");
+                playerHp += 7;
+                winLevelUp.WriteLine("Seu HP aumentou em 7.");
+                Thread.Sleep(3000);
             }
         }
         #endregion
         public void PlayerDie()
         {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Você morreu...");
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("Aqui está até onde você chegou:");
             VerStatus();
             Environment.Exit(0);
