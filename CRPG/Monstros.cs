@@ -144,11 +144,12 @@ namespace CRPG
                 monstroDefendendo = monstroDefendendo};
         }
 
-        public Monstros Chefe() => new Monstros { monstroNome = chefeFinalNome,
+        public Monstros ChefeFinal() => new Monstros { monstroNome = chefeFinalNome,
             monstroHp = chefeHp,
             monstroAtk = chefeAtk,
             monstroXpDrop = chefeXpDrop,
-            monstroDefendendo = monstroDefendendo };
+            monstroDefendendo = monstroDefendendo 
+        };
         public Monstros Vodier() => new Monstros
         {
             monstroNome = voidNome,

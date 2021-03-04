@@ -44,6 +44,44 @@ namespace CRPG
             catch (Exception e) { Error.ErrorFatal(e); }
 
             Player player = new(playerName);
+            switch (playerName)
+            {
+                case "KONAMI":
+                    player = player with
+                    {
+                        playerHp = 999
+                    };
+                    break;
+                case "EASY":
+                    player = player with
+                    {
+                        playerAtk = 8,
+                        playerHp = 32,
+                        playerDef = 6,
+                        xpParaProximo = 2
+                    };
+                    break;
+                case "HARD":
+                    player = player with
+                    {
+                        playerAtk = 2,
+                        playerHp = 16,
+                        playerDef = 0,
+                        xpParaProximo = 20
+                    };
+                    break;
+                case "GOD":
+                    player = player with
+                    {
+                        playerAtk = int.MaxValue,
+                        playerHp = int.MaxValue,
+                        playerDef = int.MaxValue,
+                        xpParaProximo = int.MaxValue,
+                        playerLevel = int.MaxValue,
+                        playerXp = 999
+                    };
+                    break;
+            }
             Console.Clear();
             player.VerStatus();
             Thread.Sleep(3000);
@@ -117,6 +155,16 @@ namespace CRPG
                                     Monstros piramideMonstros = new Monstros().PiramideMosntro();
                                     if (piramideMonstros != null) new Batalha(player, piramideMonstros, meioTela, statusTela);
                                     break;
+
+                                case Locais.ChefeFinal:
+                                    Monstros chefeFinal = new Monstros().ChefeFinal();
+                                    if (chefeFinal != null)
+                                    {
+                                        new Batalha(player, chefeFinal, meioTela, statusTela);
+                                        GameManagment.AgradecimentosFinais();
+                                    }
+                                    break;
+
                                 case Locais.Void:
                                     Monstros voider = new Monstros().Vodier();
                                     new Batalha(player, voider, meioTela, statusTela);
@@ -164,15 +212,6 @@ namespace CRPG
                         break;
                 }
             }
-            Console.WriteLine("=+=+=+=+=+=+Parabéns!!!=+=+=+=+=+");
-            Console.WriteLine("+Você conseguiu terminar o jogo.+");
-            Console.WriteLine("+             😎                +");
-            Console.WriteLine("=+=+=+=+Obrigado por jogar.=+=+=+\n");
-
-            Console.WriteLine("!..GitHub.................................!");
-            Console.WriteLine("! Visite meu GitHub: github.com/LuanRoger !...................!");
-            Console.WriteLine("! Veja também o repositório do jogo: github.com/LuanRoger/CRPG!");
-            Console.WriteLine("!.............................................................!");
         }
     }
 }

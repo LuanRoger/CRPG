@@ -35,7 +35,7 @@ namespace CRPG
             }
             if (player.playerHp >= 0)
             {
-                telaStatusAndarConsole.WriteLine(" Você ganhou!");
+                telaStatusAndarConsole.WriteLine("Você ganhou!");
                 Thread.Sleep(500);
                 player.AdicionarXp(monstroBatalha.monstroXpDrop);
                 telaStatusAndarConsole.WriteLine($"Você recebeu {monstroBatalha.monstroXpDrop} de Xp");

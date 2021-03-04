@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Konsole;
 
 namespace CRPG
 {
-    class Player
+    public record Player
     {
-        public string nome { get; }
-        public int playerAtk { get; private set; }
-        public int playerDef { get; private set; }
-        public bool playerDefendendo { get; private set; }
+        public string nome { get; set; }
+        public int playerAtk { get; set; }
+        public int playerDef { get; set; }
+        public bool playerDefendendo { get; set; }
         public int playerHp { get; set; }
-        public int palyerXp { get; set; }
-        public int xpParaProximo { get; private set; }
-        public int playerLevel { get; private set; }
-        public int passos { get; private set; }
+        public int playerXp { get; set; }
+        public int xpParaProximo { get; set; }
+        public int playerLevel { get; set; }
+        public int passos { get; set; }
+
         public Player(string nome)
         {
             this.nome = nome;
@@ -26,9 +23,12 @@ namespace CRPG
             playerDef = 2;
             playerDefendendo = false;
             playerHp = 20;
-            palyerXp = 0;
+            playerLevel = 0;
+            playerXp = 0;
             xpParaProximo = 12;
+            passos = 0;
         }
+
         public void VerStatus()
         {
             var status = Window.OpenBox("Status", 40, 10, new BoxStyle {
@@ -40,7 +40,7 @@ namespace CRPG
             status.WriteLine($"Defesa: {playerDef}");
             status.WriteLine($"HP: {playerHp}");
             status.WriteLine($"Level: {playerLevel}");
-            status.WriteLine($"XP: {palyerXp}. Faltam {xpParaProximo - palyerXp} para o próximo nivel.");
+            status.WriteLine($"XP: {playerXp}. Faltam {xpParaProximo - playerXp} para o próximo nivel.");
         }
 
         #region Ações
@@ -55,18 +55,19 @@ namespace CRPG
                 >= 20 and <= 34 => Locais.Floresta,
                 >= 35 and <= 44 => Locais.Pantano,
                 >= 45 and <= 59 => Locais.Deserto,
-                >= 60 => Locais.Piramide,
+                >= 60 and <= 99 => Locais.Piramide,
+                >= 100 => Locais.ChefeFinal,
                 _ => Locais.Void
             };
         }
         public int PlayerAttack() => playerAtk;
         public bool PlayerDefender() => playerDefendendo = true;
         public bool PlayerDesdefender() => playerDefendendo = false;
-        public void AdicionarXp(int xpAmmount) => palyerXp += xpAmmount;
+        public void AdicionarXp(int xpAmmount) => playerXp += xpAmmount;
         public void LevelUp()
         {
             Console.Clear();
-            while (palyerXp >= xpParaProximo)
+            while (playerXp >= xpParaProximo)
             {
                 playerLevel += 1;
                 xpParaProximo *= 2;
@@ -97,6 +98,7 @@ namespace CRPG
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("Aqui está até onde você chegou:");
             VerStatus();
+            Console.ReadKey();
             Environment.Exit(0);
         }
     }
