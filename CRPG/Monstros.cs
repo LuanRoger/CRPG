@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CRPG
 {
-    class Monstros
+    public class Monstros
     {
-
         public string monstroNome { get; set; }
         public int monstroHp { get; set; }
         public int monstroAtk { get; set; }

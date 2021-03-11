@@ -10,6 +10,7 @@ namespace CRPG
         private Monstros monstroBatalha { get; }
         private IConsole[] telaMeioAndarConsole { get; }
         private IConsole telaStatusAndarConsole { get; }
+
         public Batalha(Player player, Monstros monstro, IConsole telaMeioAndarConsole, IConsole telaStatusAndarConsole)
         {
             playerBatalha = player;
@@ -17,11 +18,20 @@ namespace CRPG
             this.telaMeioAndarConsole = telaMeioAndarConsole.SplitColumns(new Split(0), new Split(50));
             this.telaStatusAndarConsole = telaStatusAndarConsole;
 
+            Acessorios.AtivarItemPreBatalha(player, monstro).ForEach(acessorio =>
+            {
+                telaStatusAndarConsole.WriteLine($"{acessorio} foram ativados");
+                Thread.Sleep(350);
+            });
+
             while (true)
             {
                 Thread.Sleep(1000);
+
                 AtualizarStatusBatalha();
+
                 Thread.Sleep(500);
+
                 PlayerTurno();
 
                 if (monstro.monstroHp <= 0) break;
@@ -36,11 +46,16 @@ namespace CRPG
             if (player.playerHp >= 0)
             {
                 telaStatusAndarConsole.WriteLine("Você ganhou!");
-                Thread.Sleep(500);
-                player.AdicionarXp(monstroBatalha.monstroXpDrop);
+
+                Thread.Sleep(600);
+
                 telaStatusAndarConsole.WriteLine($"Você recebeu {monstroBatalha.monstroXpDrop} de Xp");
+
                 Thread.Sleep(1000);
-                player.LevelUp();
+
+                player.AdicionarXp(monstroBatalha.monstroXpDrop);
+
+                Acessorios.DesativarItemPreBatalha(player);
 
                 this.telaMeioAndarConsole[0].Clear();
                 this.telaMeioAndarConsole[1].Clear();
@@ -48,6 +63,7 @@ namespace CRPG
             }
             else player.PlayerDie();
         }
+
         private void AtualizarStatusBatalha()
         {
             var telaStatusMonstro = telaMeioAndarConsole[0].OpenBox("Monstro",  1, 0, 30, 7);
@@ -71,7 +87,7 @@ namespace CRPG
                 telaStatusAndarConsole.WriteLine("Você ataca.");
                 telaStatusAndarConsole.ForegroundColor = ConsoleColor.Gray;
 
-                Thread.Sleep(2000);
+                Thread.Sleep(1000);
 
                 int dano = playerBatalha.PlayerAttack();
                 if (monstroBatalha.monstroDefendendo)
@@ -128,11 +144,12 @@ namespace CRPG
                     int dano = monstroBatalha.MosnterAtacar();
                     if (playerBatalha.playerDefendendo)
                     {
-                        playerBatalha.playerHp -= dano - playerBatalha.playerDef;
+                        int danoDefendendo = dano - playerBatalha.playerDef < 0 ? 0 : dano - playerBatalha.playerDef;
+                        playerBatalha.playerHp -= danoDefendendo;
                         Thread.Sleep(2000);
 
                         telaStatusAndarConsole.ForegroundColor = ConsoleColor.Red;
-                        telaStatusAndarConsole.WriteLine($"Você recebeu {dano - playerBatalha.playerDef} de dano.");
+                        telaStatusAndarConsole.WriteLine($"Você recebeu {danoDefendendo} de dano.");
                         telaStatusAndarConsole.ForegroundColor = ConsoleColor.Gray;
 
                         playerBatalha.PlayerDesdefender();

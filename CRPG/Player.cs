@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Konsole;
 
@@ -11,10 +12,16 @@ namespace CRPG
         public int playerDef { get; set; }
         public bool playerDefendendo { get; set; }
         public int playerHp { get; set; }
+        public int playerSorte { get; set; }
+        public int playerAcharMonstro { get; set; }
         public int playerXp { get; set; }
         public int xpParaProximo { get; set; }
         public int playerLevel { get; set; }
         public int passos { get; set; }
+
+        public List<string> AcessoriosPlayer = new List<string>();
+        public int vezesAtivadoColarAmaldicoado, vezesAtivadoOlhoCiclope,
+            vezesAtivadoCapaceteMergulhador, vezesAtivadoVenenoCobra, vezesAtivadoEscaravelho = 0;
 
         public Player(string nome)
         {
@@ -23,6 +30,7 @@ namespace CRPG
             playerDef = 2;
             playerDefendendo = false;
             playerHp = 20;
+            playerSorte = 0;
             playerLevel = 0;
             playerXp = 0;
             xpParaProximo = 12;
@@ -31,18 +39,27 @@ namespace CRPG
 
         public void VerStatus()
         {
-            var status = Window.OpenBox("Status", 40, 10, new BoxStyle {
-                Title = new Colors( ConsoleColor.White, ConsoleColor.Blue),
+            var status = Window.OpenBox("Status", 41, 10, new BoxStyle {
+                Title = new Colors(ConsoleColor.White, ConsoleColor.Blue),
                 ThickNess = LineThickNess.Double
             });
             status.WriteLine($"Nome: {nome}");
             status.WriteLine($"Ataque: {playerAtk}");
             status.WriteLine($"Defesa: {playerDef}");
             status.WriteLine($"HP: {playerHp}");
+            status.WriteLine($"Sorte: {playerSorte}");
             status.WriteLine($"Level: {playerLevel}");
             status.WriteLine($"XP: {playerXp}. Faltam {xpParaProximo - playerXp} para o próximo nivel.");
         }
-
+        public void VerAcessorios()
+        {
+            var acessoriosBox = Window.OpenBox("Acessórios", 25, 20, new BoxStyle
+            {
+                Title = new Colors(ConsoleColor.White, ConsoleColor.Blue),
+                ThickNess = LineThickNess.Double
+            });
+            AcessoriosPlayer.ForEach(acessorio => acessoriosBox.WriteLine(acessorio));
+        }
         #region Ações
         public void Andar() => passos += 1; //Dar um passo
         public void Voltar() => passos -= 1;
@@ -63,8 +80,12 @@ namespace CRPG
         public int PlayerAttack() => playerAtk;
         public bool PlayerDefender() => playerDefendendo = true;
         public bool PlayerDesdefender() => playerDefendendo = false;
-        public void AdicionarXp(int xpAmmount) => playerXp += xpAmmount;
-        public void LevelUp()
+        public void AdicionarXp(int xpAmmount) 
+        {
+            playerXp += xpAmmount;
+            LevelUp();
+        }
+        private void LevelUp()
         {
             Console.Clear();
             while (playerXp >= xpParaProximo)

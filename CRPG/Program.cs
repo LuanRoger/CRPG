@@ -46,6 +46,7 @@ namespace CRPG
             Player player = new(playerName);
             switch (playerName)
             {
+                #region Nome de personagens
                 case "KONAMI":
                     player = player with
                     {
@@ -81,6 +82,7 @@ namespace CRPG
                         playerXp = 999
                     };
                     break;
+                    #endregion
             }
             Console.Clear();
             player.VerStatus();
@@ -97,10 +99,10 @@ namespace CRPG
                 });
                 infoWin.WriteLine($"Você está em: {player.VerAoRedor()}, você já andou {player.passos} vezes.");
 
-                var menuGameWin = new Window(83, 4, ConsoleColor.White, ConsoleColor.DarkBlue);
+                var menuGameWin = new Window(87, 4, ConsoleColor.White, ConsoleColor.DarkBlue);
                 menuGameWin.WriteLine("O que deseja fazer?");
                 menuGameWin.WriteLine("------------------");
-                menuGameWin.WriteLine("> [ 1 ] - Andar.    [ 2 ] - Voltar.    [ 3 ] - Ver status.    [ 4 ] - Sair do jogo.");
+                menuGameWin.WriteLine("> [ 1 ] - Andar.    [ 2 ] - Voltar.    [ 3 ] - Ver personagem.    [ 4 ] - Sair do jogo.");
                 int playerChoice = 0;
                 try { playerChoice = Convert.ToInt32(Console.ReadLine()); }
                 catch (Exception e) { Error.ErrorFatal(e); }
@@ -130,6 +132,9 @@ namespace CRPG
                             player.Andar();
                             a++;
                             progressoAndar.Refresh(a, "Andando...");
+
+                            Acessorios.ProcurarItem(player.VerAoRedor(), player);
+
                             Thread.Sleep(350);
 
                             #region Encontrar monstro
@@ -205,6 +210,9 @@ namespace CRPG
 
                     case 3:
                         player.VerStatus();
+                        player.VerAcessorios();
+                        Thread.Sleep(5000);
+                        Console.Clear();
                         break;
 
                     case 4:
