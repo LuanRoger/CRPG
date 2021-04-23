@@ -15,7 +15,6 @@ namespace CRPG
         public bool monstroDefendendo { get; set; } = false;
 
         #region Monstros
-
         //Monstros da planice
         private readonly string[] monstroPlaniceNome = new string[]
             {"Ladrão", "Cavalo Louco", "Borboleta", "Lobo", "Alien Fraco", "Minhoca"};
@@ -73,32 +72,85 @@ namespace CRPG
         public bool MosnterDefender() => monstroDefendendo = true;
         public bool MosnterDesdefender() => monstroDefendendo = false;
 
-        private static bool MonstroAchar()
-        {
-            Random randMonsterChance = new();
-            int monsterChance = randMonsterChance.Next(0, 26);
+        private readonly int ChanceFoundMonster = 100;
 
-            bool achado = monsterChance <= 6;
-            return achado;
+        public Monstros MonstroAchar(Locais locais)
+        {
+            int chance = new Random().Next(0, ChanceFoundMonster);
+            return locais switch
+            {
+                Locais.Planices => MonstroPlanice(chance),
+                Locais.Floresta => FlorestaMonstro(chance),
+                Locais.Pantano => PantanoMonstro(chance),
+                Locais.Deserto => DesertoMonstro(chance),
+                Locais.Piramide => PiramideMosntro(chance),
+                Locais.Void => Voider(),
+                Locais.ChefeFinal => ChefeFinal(),
+                _ => Voider(),
+            };
         }
 
         #region MosntrosAtributos
-        public Monstros MonstroPlanice()
+        private Monstros MonstroPlanice(int chance)
         {
-            if (!MonstroAchar()) return null;
-            int mosntroIndex = new Random().Next(6);
+            int monstroIndex;
+            switch(chance)
+            {
+                case <= 5:
+                    monstroIndex = 0;
+                    break;
+                case > 5 and <= 10:
+                    monstroIndex = 1;
+                    break;
+                case > 10 and <= 20:
+                    monstroIndex = 2;
+                    break;
+                case > 20 and <= 30:
+                    monstroIndex = 3;
+                    break;
+                case > 30 and <= 35:
+                    monstroIndex = 4;
+                    break;
+                case > 35 and <= 40:
+                    monstroIndex = 5;
+                    break;
+                default:
+                    return null;
+            }
 
-            return new Monstros { monstroNome = monstroPlaniceNome[mosntroIndex],
-                monstroHp = monstroPlaniceHp[mosntroIndex],
-                monstroAtk = monstroPlaniceAtk[mosntroIndex],
-                monstroXpDrop = monstroPlaniceXpDrop[mosntroIndex],
+            return new Monstros { monstroNome = monstroPlaniceNome[monstroIndex],
+                monstroHp = monstroPlaniceHp[monstroIndex],
+                monstroAtk = monstroPlaniceAtk[monstroIndex],
+                monstroXpDrop = monstroPlaniceXpDrop[monstroIndex],
                 monstroDefendendo = monstroDefendendo };
         }
 
-        public Monstros FlorestaMonstro()
+        private Monstros FlorestaMonstro(int chance)
         {
-            if (!MonstroAchar()) return null;
-            int monstroIndex = new Random().Next(6);
+            int monstroIndex;
+            switch (chance)
+            {
+                case <= 5:
+                    monstroIndex = 0;
+                    break;
+                case > 5 and <= 10:
+                    monstroIndex = 1;
+                    break;
+                case > 10 and <= 20:
+                    monstroIndex = 2;
+                    break;
+                case > 20 and <= 30:
+                    monstroIndex = 3;
+                    break;
+                case > 30 and <= 35:
+                    monstroIndex = 4;
+                    break;
+                case > 35 and <= 40:
+                    monstroIndex = 5;
+                    break;
+                default:
+                    return null;
+            }
 
             return new Monstros { monstroNome = monstroFlorestaNome[monstroIndex],
                 monstroHp = monstroFlorestaHp[monstroIndex],
@@ -107,10 +159,32 @@ namespace CRPG
                 monstroDefendendo = monstroDefendendo };
         }
 
-        public Monstros PantanoMonstro()
+        private Monstros PantanoMonstro(int chance)
         {
-            if (!MonstroAchar()) return null;
-            int monstroIndex = new Random().Next(6);
+            int monstroIndex;
+            switch (chance)
+            {
+                case <= 5:
+                    monstroIndex = 0;
+                    break;
+                case > 5 and <= 10:
+                    monstroIndex = 1;
+                    break;
+                case > 10 and <= 20:
+                    monstroIndex = 2;
+                    break;
+                case > 20 and <= 30:
+                    monstroIndex = 3;
+                    break;
+                case > 30 and <= 35:
+                    monstroIndex = 4;
+                    break;
+                case > 35 and <= 40:
+                    monstroIndex = 5;
+                    break;
+                default:
+                    return null;
+            }
 
             return new Monstros { monstroNome = monstroPantanoNome[monstroIndex],
                 monstroHp = monstroPantanoHp[monstroIndex],
@@ -119,10 +193,32 @@ namespace CRPG
                 monstroDefendendo = monstroDefendendo };
         }
 
-        public Monstros DesertoMonstro()
+        private Monstros DesertoMonstro(int chance)
         {
-            if (!MonstroAchar()) return null;
-            int monstroIndex = new Random().Next(6);
+            int monstroIndex;
+            switch (chance)
+            {
+                case <= 5:
+                    monstroIndex = 0;
+                    break;
+                case > 5 and <= 10:
+                    monstroIndex = 1;
+                    break;
+                case > 10 and <= 20:
+                    monstroIndex = 2;
+                    break;
+                case > 20 and <= 30:
+                    monstroIndex = 3;
+                    break;
+                case > 30 and <= 35:
+                    monstroIndex = 4;
+                    break;
+                case > 35 and <= 40:
+                    monstroIndex = 5;
+                    break;
+                default:
+                    return null;
+            }
 
             return new Monstros { monstroNome = monstroDesertoName[monstroIndex],
                 monstroHp = monstroDesertoHp[monstroIndex],
@@ -131,10 +227,32 @@ namespace CRPG
                 monstroDefendendo = monstroDefendendo};
         }
 
-        public Monstros PiramideMosntro()
+        private Monstros PiramideMosntro(int chance)
         {
-            if (!MonstroAchar()) return null;
-            int monstroIndex = new Random().Next(6);
+            int monstroIndex;
+            switch (chance)
+            {
+                case <= 5:
+                    monstroIndex = 0;
+                    break;
+                case > 5 and <= 10:
+                    monstroIndex = 1;
+                    break;
+                case > 10 and <= 20:
+                    monstroIndex = 2;
+                    break;
+                case > 20 and <= 30:
+                    monstroIndex = 3;
+                    break;
+                case > 30 and <= 35:
+                    monstroIndex = 4;
+                    break;
+                case > 35 and <= 40:
+                    monstroIndex = 5;
+                    break;
+                default:
+                    return null;
+            }
 
             return new Monstros { monstroNome = monstroPiramideName[monstroIndex],
                 monstroHp = monstroPiramideHp[monstroIndex],
@@ -143,13 +261,14 @@ namespace CRPG
                 monstroDefendendo = monstroDefendendo};
         }
 
-        public Monstros ChefeFinal() => new Monstros { monstroNome = chefeFinalNome,
+        private Monstros ChefeFinal() => new()
+        { monstroNome = chefeFinalNome,
             monstroHp = chefeHp,
             monstroAtk = chefeAtk,
             monstroXpDrop = chefeXpDrop,
             monstroDefendendo = monstroDefendendo 
         };
-        public Monstros Vodier() => new Monstros
+        private Monstros Voider() => new()
         {
             monstroNome = voidNome,
             monstroHp = voiderHp,

@@ -119,6 +119,7 @@ namespace CRPG
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("Aqui está até onde você chegou:");
             VerStatus();
+            Console.WriteLine("Aperte qualquer tecla para sair...");
             Console.ReadKey();
             Environment.Exit(0);
         }

@@ -8,6 +8,8 @@ namespace CRPG
 {
     public class Acessorios
     {
+        private static int LuckFoundItem = 200;
+
         private static readonly string[] AcessoriosPlanices = new string[] { "Trevo" };
         private static readonly string[] AcessoriosFloresta = new string[] { "Olho de Ciclope", "Bracelete de Protecao", "Colar Amaldiçoado" };
         private static readonly string[] AcessorioPantano = new string[] { "Lanterna", "Veneno de Cobra", "Capacete de Mergulhador" };
@@ -17,7 +19,7 @@ namespace CRPG
 
         public static void ProcurarItem(Locais localAtual, Player player)
         {
-            int chance = new Random().Next(0, 100 - player.playerSorte);
+            int chance = new Random().Next(0, LuckFoundItem - player.playerSorte);
 
             switch(localAtual) 
             {

@@ -21,7 +21,7 @@ namespace CRPG
             Acessorios.AtivarItemPreBatalha(player, monstro).ForEach(acessorio =>
             {
                 telaStatusAndarConsole.WriteLine($"{acessorio} foram ativados");
-                Thread.Sleep(350);
+                Thread.Sleep(2000);
             });
 
             while (true)

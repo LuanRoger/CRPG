@@ -120,7 +120,7 @@ namespace CRPG
                         var telasAndar = telaAndar.SplitRows(
                             new Split(4, "Progresso", LineThickNess.Single),
                             new Split(0, "Batalha"),
-                            new Split(5, "Acontecimentos", LineThickNess.Single));
+                            new Split(6, "Acontecimentos", LineThickNess.Single));
 
                         var meioTela = telasAndar[1];
                         var statusTela = telasAndar[2];
@@ -137,45 +137,9 @@ namespace CRPG
 
                             Thread.Sleep(350);
 
-                            #region Encontrar monstro
-                            switch (player.VerAoRedor())
-                            {
-                                case Locais.Planices:
-                                    Monstros planiceMonstro = new Monstros().MonstroPlanice();
-                                    if (planiceMonstro != null) new Batalha(player, planiceMonstro, meioTela, statusTela);
-                                    break;
-                                case Locais.Floresta:
-                                    Monstros florestaMonstros = new Monstros().FlorestaMonstro();
-                                    if (florestaMonstros != null) new Batalha(player, florestaMonstros, meioTela, statusTela);
-                                    break;
-                                case Locais.Pantano:
-                                    Monstros pantanoMonstros = new Monstros().PantanoMonstro();
-                                    if (pantanoMonstros != null) new Batalha(player, pantanoMonstros, meioTela, statusTela);
-                                    break;
-                                case Locais.Deserto:
-                                    Monstros desertoMonstros = new Monstros().DesertoMonstro();
-                                    if (desertoMonstros != null) new Batalha(player, desertoMonstros, meioTela, statusTela);
-                                    break;
-                                case Locais.Piramide:
-                                    Monstros piramideMonstros = new Monstros().PiramideMosntro();
-                                    if (piramideMonstros != null) new Batalha(player, piramideMonstros, meioTela, statusTela);
-                                    break;
+                            Monstros monstros = new Monstros().MonstroAchar(player.VerAoRedor());
+                            if (monstros != null) new Batalha(player, monstros, meioTela, statusTela);
 
-                                case Locais.ChefeFinal:
-                                    Monstros chefeFinal = new Monstros().ChefeFinal();
-                                    if (chefeFinal != null)
-                                    {
-                                        new Batalha(player, chefeFinal, meioTela, statusTela);
-                                        GameManagment.AgradecimentosFinais();
-                                    }
-                                    break;
-
-                                case Locais.Void:
-                                    Monstros voider = new Monstros().Vodier();
-                                    new Batalha(player, voider, meioTela, statusTela);
-                                    break;
-                            }
-                            #endregion
                             telaAndar.SplitRows(
                                 new Split(4, "Progresso", LineThickNess.Single),
                                 new Split(0, "Batalha"),
